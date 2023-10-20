@@ -1,0 +1,6 @@
+pandas
+numpy
+jupyter
+scikit-learn
+mlflow
+-e .
