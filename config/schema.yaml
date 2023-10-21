@@ -1,0 +1,18 @@
+features:
+  Age: int64
+  BusinessTravel: object
+  Department: object
+  EducationField: object
+  EnvironmentSatisfaction: int64
+  Gender: object
+  JobInvolvement: int64
+  JobSatisfaction: int64
+  MaritalStatus: object
+  MonthlyIncome: int64
+  OverTime: object
+  PerformanceRating: int64
+  TotalWorkingYears: int64
+  YearsAtCompany: int64
+  YearsSinceLastPromotion: int64
+
+target: Attrition

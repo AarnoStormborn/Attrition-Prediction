@@ -3,4 +3,5 @@ numpy
 jupyter
 scikit-learn
 mlflow
--e .
+python-box
+#-e .

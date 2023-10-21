@@ -1,0 +1,16 @@
+artifacts_root: artifacts
+
+data_ingestion:
+  root_dir: artifacts/data_ingestion
+  source_URL: https://github.com/AarnoStormborn/eda_ML/raw/main/attrition-dataset.zip
+  local_file: artifacts/data_ingestion/data.zip
+
+data_transformation:
+  root_dir: artifacts/data_transformation
+  data_path: artifacts/data_ingestion/data.csv
+  data_split: 0.20
+
+data_preprocessor:
+  root_dir: artifacts/data_preprocessor
+  train_data_path: artifacts/data_transformation/train.csv
+  test_data_path: artifacts/data_transformation/test.csv
