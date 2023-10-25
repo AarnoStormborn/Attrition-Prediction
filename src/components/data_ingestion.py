@@ -10,6 +10,8 @@ from src.utils import read_config
 from src.constant import CONFIG_FILE
 from src.components.data_transformation import DataTransformation
 from src.components.data_preprocessor import DataPreprocessor
+from src.components.model_trainer import ModelTrainer
+from src.components.model_evaluation import ModelEvaluation
 
 @dataclass
 class DataIngestionConfig:
@@ -60,5 +62,12 @@ if __name__=="__main__":
     trans.data_split()
 
     preprocessor = DataPreprocessor(config.data_preprocessor)
-    print(preprocessor.preprocess_data())
+    train_set, test_set = preprocessor.preprocess_data()
+
+    mt = ModelTrainer(config.model_trainer)
+    mt.model_trainer(train_set)
+
+    me = ModelEvaluation(config.model_evaluation)
+    me.model_evaluator(test_set)
+
 
