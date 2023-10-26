@@ -24,7 +24,7 @@ class DataIngestion:
     def __init__(self, config:DataIngestionConfig):
         self.config = config
 
-    def download_zip_file(self):
+    def download_zip_file(self) -> None:
 
         try:
             os.makedirs(self.config.root_dir, exist_ok=True)
@@ -43,7 +43,7 @@ class DataIngestion:
         except Exception as e:
             logging.error(CustomException(e,sys))    
 
-    def extract_zip_file(self):
+    def extract_zip_file(self) -> None:
 
         try:
             with zipfile.ZipFile(self.config.local_file, 'r') as zip_ref:

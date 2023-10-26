@@ -2,6 +2,7 @@ import os
 import sys
 import joblib
 import pandas as pd
+from typing import List, Tuple
 from dataclasses import dataclass
 
 from src.logger import logging
@@ -24,7 +25,7 @@ class DataPreprocessor:
     def __init__(self, config:DataPreprocessorConfig):
         self.config = config
 
-    def get_preprocessor(self, cat_feats, num_feats):
+    def get_preprocessor(self, cat_feats:List[str], num_feats:List[str]) -> ColumnTransformer:
         try:
             cat_pipeline = Pipeline([
                 ("imputer", SimpleImputer(strategy='most_frequent')),
@@ -48,7 +49,7 @@ class DataPreprocessor:
         except Exception as e:
             logging.error(CustomException(e, sys))
     
-    def preprocess_data(self):
+    def preprocess_data(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
         try:
             root_dir = self.config.root_dir
             os.makedirs(root_dir, exist_ok=True)

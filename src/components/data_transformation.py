@@ -18,7 +18,7 @@ class DataTransformation:
     def __init__(self, config:DataTransformationConfig):
         self.config = config
 
-    def data_split(self):
+    def data_split(self) -> None:
         try:
             root_dir = self.config.root_dir
             os.makedirs(root_dir, exist_ok=True)

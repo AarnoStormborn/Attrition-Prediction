@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import joblib
+import pandas as pd
 from dataclasses import dataclass
 
 from src.logger import logging
@@ -21,7 +22,7 @@ class ModelTrainer:
     def __init__(self, config:ModelTrainerConfig):
         self.config = config
 
-    def model_trainer(self, train_set):
+    def model_trainer(self, train_set:pd.DataFrame) -> None:
         try:
             root_dir = self.config.root_dir
             os.makedirs(root_dir, exist_ok=True)

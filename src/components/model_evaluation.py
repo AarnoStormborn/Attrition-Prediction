@@ -22,7 +22,7 @@ class ModelEvaluation:
     def __init__(self, config:ModelEvaluationConfig):
         self.config = config
 
-    def model_evaluator(self, test_set):
+    def model_evaluator(self, test_set:pd.DataFrame) -> None:
         try:
             root_dir = self.config.root_dir
             os.makedirs(root_dir, exist_ok=True)

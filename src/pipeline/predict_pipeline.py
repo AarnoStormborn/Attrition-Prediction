@@ -2,6 +2,7 @@ import os
 import sys
 import joblib
 
+from pandas import DataFrame
 from dataclasses import dataclass
 from src.logger import logging
 from src.exception import CustomException
@@ -18,7 +19,7 @@ class PredictionPipeline:
         self.preprocessor = joblib.load(self.config.preprocessor_path)
         self.model = joblib.load(self.config.model_path)
 
-    def predict(self, data):
+    def predict(self, data:DataFrame) -> str:
 
         try:
             logging.info("Prediction Data Obtained")
