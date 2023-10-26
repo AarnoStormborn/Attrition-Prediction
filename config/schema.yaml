@@ -5,6 +5,7 @@ features:
   EducationField: object
   EnvironmentSatisfaction: int64
   Gender: object
+  HourlyRate: int64
   JobInvolvement: int64
   JobSatisfaction: int64
   MaritalStatus: object
