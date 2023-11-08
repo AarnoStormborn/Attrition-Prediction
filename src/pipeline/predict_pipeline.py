@@ -27,12 +27,10 @@ class PredictionPipeline:
             prediction_data = self.preprocessor.transform(data)
             logging.info("Prediction Data Preprocessed")
 
-            prediction = self.model.predict(prediction_data)
+            prediction = self.model.predict_proba(prediction_data)
             logging.info("Model Prediction Complete")
 
-            if prediction[0] == 0:
-                return "No"
-            else: return "Yes"
+            return prediction
 
         except Exception as e:
             logging.error(CustomException(e,sys))    
