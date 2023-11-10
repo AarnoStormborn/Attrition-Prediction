@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 from src.logger import logging
 from src.exception import CustomException
-from src.utils import plot_confusion_matrix
+from src.utils import plot_confusion_matrix, get_latest_run_id
 
 from sklearn.metrics import (classification_report, 
                              accuracy_score, f1_score,
@@ -23,25 +23,12 @@ class ModelEvaluation:
     def __init__(self, config:ModelEvaluationConfig):
         self.config = config
 
-    def get_latest_run_id(self) -> str:
-        runs = mlflow.search_runs(experiment_ids=[str(self.config.experiment_id)], 
-                                  order_by=['end_time'])
-        
-        if not runs.empty:
-            latest_run_id = runs.iloc[-1,:]['run_id']
-
-            logging.info(f"Retrieved Latest Run ID: {latest_run_id}")
-            return latest_run_id
-        
-        else:
-            logging.error("No Runs in the Experiment")
-
     def model_evaluator(self, test_set:pd.DataFrame) -> None:
         try:
             X_test, y_test = test_set
 
-            latest_run_id = self.get_latest_run_id()
-            print(latest_run_id)
+            latest_run_id = get_latest_run_id(experiment_id=self.config.experiment_id)
+
             model_uri = os.path.join(mlflow.get_artifact_uri(), 'classification_model')
    
             loaded_model = mlflow.sklearn.load_model(model_uri)

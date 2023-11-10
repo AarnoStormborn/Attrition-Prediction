@@ -17,8 +17,7 @@ import mlflow.sklearn
 
 @dataclass
 class ModelTrainerConfig:
-    root_dir: str
-    preprocessor_path: str
+    model: str
 
 class ModelTrainer:
     def __init__(self, config:ModelTrainerConfig):

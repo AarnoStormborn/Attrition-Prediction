@@ -1,8 +1,10 @@
 import os
 import yaml
+import mlflow
 import seaborn as sns
 import matplotlib.pyplot as plt
 from box import ConfigBox
+
 
 def read_config(filepath):
     with open(filepath) as f:
@@ -19,3 +21,10 @@ def plot_confusion_matrix(confusion_matrix):
     ax.set_title('Confusion Matrix')
 
     return fig
+
+def get_latest_run_id(experiment_id):
+    runs = mlflow.search_runs(experiment_ids=[str(experiment_id)], 
+                                order_by=['end_time'])
+    
+    latest_run_id = runs.iloc[-1,:]['run_id']
+    return latest_run_id

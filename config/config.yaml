@@ -16,11 +16,11 @@ data_preprocessor:
   test_data_path: artifacts/data_transformation/test.csv
 
 model_trainer:
-  root_dir: artifacts/model_trainer
+  model: randomforestclassifier
 
 model_evaluation:
   experiment_id: 0
 
 model_prediction:
   preprocessor_path: artifacts/data_preprocessor/preprocessor.pkl
-  model_path: artifacts/model_trainer/model.pkl
+  experiment_id: 0
