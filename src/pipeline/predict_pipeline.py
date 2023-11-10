@@ -15,6 +15,7 @@ import mlflow.sklearn
 class PredictionConfig:
     preprocessor_path: str
     experiment_id: str
+    experiment_dir_path: str
 
 class PredictionPipeline:
 
@@ -23,8 +24,9 @@ class PredictionPipeline:
         self.preprocessor = joblib.load(self.config.preprocessor_path)
         
         latest_run_id = get_latest_run_id(self.config.experiment_id)
+        model_uri = self.config.experiment_dir_path.format(str(latest_run_id))
+
         with mlflow.start_run(run_id=latest_run_id):
-            model_uri = os.path.join(mlflow.get_artifact_uri(), 'classification_model')
             self.model = mlflow.sklearn.load_model(model_uri=model_uri)
 
             logging.info("Model Loaded")

@@ -18,6 +18,7 @@ import mlflow.sklearn
 @dataclass
 class ModelEvaluationConfig:
     experiment_id: str
+    experiment_dir_path: str
 
 class ModelEvaluation:
     def __init__(self, config:ModelEvaluationConfig):
@@ -29,8 +30,7 @@ class ModelEvaluation:
 
             latest_run_id = get_latest_run_id(experiment_id=self.config.experiment_id)
 
-            model_uri = os.path.join(mlflow.get_artifact_uri(), 'classification_model')
-   
+            model_uri = self.config.experiment_dir_path.format(str(latest_run_id))
             loaded_model = mlflow.sklearn.load_model(model_uri)
 
             y_pred = loaded_model.predict(X_test)
