@@ -10,10 +10,12 @@ def read_config(filepath):
     data = ConfigBox(data)
     return data    
 
-def plot_confusion_matrix(filepath, confusion_matrix):
-    plt.figure()
-    sns.heatmap(confusion_matrix, cmap='Blues', cbar=False, annot=True, fmt='.3g')
-    plt.xlabel('Predicted Labels')
-    plt.ylabel('True Labels')
-    plt.title('Confusion Matrix')
-    plt.savefig(os.path.join(filepath, 'confusion_matrix.png'))
+def plot_confusion_matrix(confusion_matrix):
+    fig, ax = plt.subplots()
+    sns.heatmap(confusion_matrix, cmap='Blues', cbar=False, annot=True, fmt='.3g', ax=ax)
+
+    ax.set_xlabel('Predicted Labels')
+    ax.set_ylabel('True Labels')
+    ax.set_title('Confusion Matrix')
+
+    return fig

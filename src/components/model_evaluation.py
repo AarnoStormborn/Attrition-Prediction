@@ -1,7 +1,6 @@
 import os
 import sys
 import json
-import joblib
 import pandas as pd
 from dataclasses import dataclass
 
@@ -13,48 +12,64 @@ from sklearn.metrics import (classification_report,
                              accuracy_score, f1_score,
                              confusion_matrix)
 
+import mlflow
+import mlflow.sklearn
+
 @dataclass
 class ModelEvaluationConfig:
-    root_dir: str
-    model_path: str
+    experiment_id: str
 
 class ModelEvaluation:
     def __init__(self, config:ModelEvaluationConfig):
         self.config = config
 
+    def get_latest_run_id(self) -> str:
+        runs = mlflow.search_runs(experiment_ids=[str(self.config.experiment_id)], 
+                                  order_by=['end_time'])
+        
+        if not runs.empty:
+            latest_run_id = runs.iloc[-1,:]['run_id']
+
+            logging.info(f"Retrieved Latest Run ID: {latest_run_id}")
+            return latest_run_id
+        
+        else:
+            logging.error("No Runs in the Experiment")
+
     def model_evaluator(self, test_set:pd.DataFrame) -> None:
         try:
-            root_dir = self.config.root_dir
-            os.makedirs(root_dir, exist_ok=True)
-
             X_test, y_test = test_set
 
-            logging.info("Loading Model")
-            loaded_model = joblib.load(self.config.model_path)
+            latest_run_id = self.get_latest_run_id()
+            print(latest_run_id)
+            model_uri = os.path.join(mlflow.get_artifact_uri(), 'classification_model')
+   
+            loaded_model = mlflow.sklearn.load_model(model_uri)
 
             y_pred = loaded_model.predict(X_test)
 
             accuracy = accuracy_score(y_test, y_pred)
             f1 = f1_score(y_test, y_pred)
 
-            logging.info("Saving Results...")
-            pd.DataFrame({
-                'accuracy_score': [accuracy],
-                'f1_score': [f1]
-            }).to_csv(os.path.join(root_dir, "results.csv"))
+            mlflow.log_metric("test - accuracy", accuracy)
+            mlflow.log_metric("test - f1_score", f1)
 
             logging.info("Results saved")
 
             clf_report = classification_report(y_test, y_pred, output_dict=True)
-            with open(os.path.join(root_dir, "classification_report.json"), "w") as f:
-                json.dump(clf_report, f, indent=4)
+            mlflow.log_table(clf_report, "classification_report.json")
 
             logging.info("Classification Report saved")
 
             cm = confusion_matrix(y_test, y_pred)
-            plot_confusion_matrix(root_dir, cm)
+            cm_fig = plot_confusion_matrix(cm)
+
+            mlflow.log_figure(cm_fig, "confusion_matrix.png")
 
             logging.info("Confusion Matrix Saved")
 
         except Exception as e:
             logging.error(CustomException(e, sys))
+
+        finally:
+            mlflow.end_run()

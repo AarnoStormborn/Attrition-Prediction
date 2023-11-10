@@ -1,7 +1,6 @@
 import os
 import sys
 import time
-import joblib
 import pandas as pd
 from dataclasses import dataclass
 
@@ -12,6 +11,9 @@ from src.constant import PARAMS_FILE
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
+
+import mlflow
+import mlflow.sklearn
 
 @dataclass
 class ModelTrainerConfig:
@@ -24,27 +26,33 @@ class ModelTrainer:
 
     def model_trainer(self, train_set:pd.DataFrame) -> None:
         try:
-            root_dir = self.config.root_dir
-            os.makedirs(root_dir, exist_ok=True)
 
             X_train, y_train = train_set
             params = read_config(PARAMS_FILE).param_grid
             logging.info("Loading Model Parameters Grid")
+            
+            mlflow.start_run()
 
             logging.info("Starting Model Training...")
             start = time.time()
             rfc = RandomForestClassifier(random_state=42)
             grid_search_cv = GridSearchCV(estimator=rfc,
                                           param_grid=params,
-                                          cv=5,
+                                          cv=2,
                                           scoring='accuracy')
             
             grid_search_cv.fit(X_train, y_train)
 
             end = time.time() - start
             logging.info(f"Model Training Complete. Time taken: {end:.2f} seconds")
-            best_model = grid_search_cv.best_estimator_
-            joblib.dump(best_model, os.path.join(root_dir, "model.pkl"))
+
+            mlflow.log_param("cv", 5)
+            mlflow.log_param("scoring", "accuracy")
+            mlflow.log_metric("training time", end)
+            mlflow.log_metric("training - accuracy", grid_search_cv.best_score_)
+
+            mlflow.sklearn.log_model(grid_search_cv.best_estimator_, "classification_model")
+
             logging.info("Best Model Saved")
 
         except Exception as e:

@@ -19,8 +19,7 @@ model_trainer:
   root_dir: artifacts/model_trainer
 
 model_evaluation:
-  root_dir: artifacts/model_results
-  model_path: artifacts/model_trainer/model.pkl
+  experiment_id: 0
 
 model_prediction:
   preprocessor_path: artifacts/data_preprocessor/preprocessor.pkl

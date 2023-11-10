@@ -8,4 +8,5 @@ seaborn
 fastapi
 pydantic
 uvicorn
+mlflow
 -e .
