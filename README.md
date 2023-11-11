@@ -45,3 +45,13 @@ A Custom Exception is setup to pinpoint errors within the project structure
 4. **Logger**:
 Custom Logging for project logs
 
+
+### Future Work
+
+1. **Mlflow**: Experiment & Model Tracking, versioning
+2. **Artifacts Store**: Cloud storage integrated with Mlflow
+3. **DVC**: Data Version Control for maintaining separate versions of Dataset
+4. **Feature Store**: Keeping track of most important features across Model Runs
+5. **Dashboard**: Exploratory Data Analysis, Results & Model Explainability
+6. **Scheduling / DAGs**: Scheduling jobs with cron, implementing DAGs with Apache Airflow
+
