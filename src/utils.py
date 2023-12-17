@@ -22,8 +22,8 @@ def plot_confusion_matrix(confusion_matrix):
 
     return fig
 
-def get_latest_run_id(experiment_id):
-    runs = mlflow.search_runs(experiment_ids=[str(experiment_id)], 
+def get_latest_run_id(experiment_name):
+    runs = mlflow.search_runs(experiment_names=[experiment_name], 
                                 order_by=['end_time'])
     
     latest_run_id = runs.iloc[-1,:]['run_id']

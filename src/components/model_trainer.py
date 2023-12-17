@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from src.logger import logging
 from src.exception import CustomException
 from src.utils import read_config
-from src.constant import PARAMS_FILE
+from src.constant import PARAMS_FILE, MLFLOW_SETUP_FILE
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
@@ -25,6 +25,11 @@ class ModelTrainer:
 
     def model_trainer(self, train_set:pd.DataFrame) -> None:
         try:
+            
+            mlflow_setup = read_config(MLFLOW_SETUP_FILE).mlflow_setup
+
+            mlflow.set_tracking_uri(mlflow_setup.mlflow_tracking_uri)
+            mlflow.set_experiment(mlflow_setup.mlflow_experiment_name)
 
             X_train, y_train = train_set
             params = read_config(PARAMS_FILE).param_grid

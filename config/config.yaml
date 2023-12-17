@@ -19,10 +19,10 @@ model_trainer:
   model: randomforestclassifier
 
 model_evaluation:
-  experiment_id: 0
-  experiment_dir_path: mlruns/0/{}/artifacts/classification_model
+  experiment_name: Attrition-Prediction
+  experiment_dir_path: s3://mlflow-artifacts-harsh/1/{}/artifacts/classification_model
 
 model_prediction:
   preprocessor_path: artifacts/data_preprocessor/preprocessor.pkl
-  experiment_id: 0
-  experiment_dir_path: mlruns/0/{}/artifacts/classification_model
+  experiment_name: Attrition-Prediction
+  experiment_dir_path: s3://mlflow-artifacts-harsh/1/{}/artifacts/classification_model

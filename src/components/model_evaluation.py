@@ -26,11 +26,13 @@ class ModelEvaluation:
 
     def model_evaluator(self, test_set:pd.DataFrame) -> None:
         try:
+
             X_test, y_test = test_set
 
-            latest_run_id = get_latest_run_id(experiment_id=self.config.experiment_id)
+            latest_run_id = get_latest_run_id(experiment_name=self.config.experiment_name)
 
             model_uri = self.config.experiment_dir_path.format(str(latest_run_id))
+            
             loaded_model = mlflow.sklearn.load_model(model_uri)
 
             y_pred = loaded_model.predict(X_test)
