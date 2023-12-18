@@ -16,9 +16,13 @@ data_preprocessor:
   test_data_path: artifacts/data_transformation/test.csv
 
 model_trainer:
+  preprocessed_train_data: artifacts/data_preprocessor/X_train.csv
+  labels: artifacts/data_preprocessor/y_train.csv
   model: randomforestclassifier
 
 model_evaluation:
+  preprocessed_test_data: artifacts/data_preprocessor/X_test.csv
+  labels: artifacts/data_preprocessor/y_test.csv
   experiment_name: Attrition-Prediction
   experiment_dir_path: s3://mlflow-artifacts-harsh/1/{}/artifacts/classification_model
 

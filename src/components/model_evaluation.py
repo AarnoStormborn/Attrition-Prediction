@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import numpy as np
 import pandas as pd
 from dataclasses import dataclass
 
@@ -24,10 +25,11 @@ class ModelEvaluation:
     def __init__(self, config:ModelEvaluationConfig):
         self.config = config
 
-    def model_evaluator(self, test_set:pd.DataFrame) -> None:
+    def model_evaluator(self) -> None:
         try:
 
-            X_test, y_test = test_set
+            X_test = pd.read_csv(self.config.preprocessed_test_data)
+            y_test = np.reshape(pd.read_csv(self.config.labels), -1)
 
             latest_run_id = get_latest_run_id(experiment_name=self.config.experiment_name)
 

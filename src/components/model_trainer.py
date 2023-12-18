@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import numpy as np
 import pandas as pd
 from dataclasses import dataclass
 
@@ -23,7 +24,7 @@ class ModelTrainer:
     def __init__(self, config:ModelTrainerConfig):
         self.config = config
 
-    def model_trainer(self, train_set:pd.DataFrame) -> None:
+    def model_trainer(self) -> None:
         try:
             
             mlflow_setup = read_config(MLFLOW_SETUP_FILE).mlflow_setup
@@ -31,7 +32,9 @@ class ModelTrainer:
             mlflow.set_tracking_uri(mlflow_setup.mlflow_tracking_uri)
             mlflow.set_experiment(mlflow_setup.mlflow_experiment_name)
 
-            X_train, y_train = train_set
+            X_train = pd.read_csv(self.config.preprocessed_train_data)
+            y_train = np.reshape(pd.read_csv(self.config.labels), -1)
+
             params = read_config(PARAMS_FILE).param_grid
             logging.info("Loading Model Parameters Grid")
             

@@ -2,7 +2,8 @@ import os
 import sys
 import joblib
 import pandas as pd
-from typing import List, Tuple
+import numpy as np
+from typing import List
 from dataclasses import dataclass
 
 from src.logger import logging
@@ -49,7 +50,7 @@ class DataPreprocessor:
         except Exception as e:
             logging.error(CustomException(e, sys))
     
-    def preprocess_data(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    def preprocess_data(self) -> None:
         try:
             root_dir = self.config.root_dir
             os.makedirs(root_dir, exist_ok=True)
@@ -81,19 +82,18 @@ class DataPreprocessor:
 
             logging.info("Data Succesfully Preprocessed")
 
-            train_data_transformed = X_train_transformed, y_train_encoded
-            test_data_tranformed = X_test_transformed, y_test_encoded
+            pd.DataFrame(X_train_transformed).to_csv(os.path.join(root_dir, "X_train.csv"), index=False)
+            pd.DataFrame(np.reshape(y_train_encoded, -1)).to_csv(os.path.join(root_dir, "y_train.csv"), index=False)
+
+            logging.info("Preprocessed Training Data Saved")
+
+            pd.DataFrame(X_test_transformed).to_csv(os.path.join(root_dir, "X_test.csv"), index=False)
+            pd.DataFrame(np.reshape(y_test_encoded, -1)).to_csv(os.path.join(root_dir, "y_test.csv"), index=False)
+
+            logging.info("Preprocessed Test data saved")
 
             joblib.dump(preprocessor, os.path.join(root_dir, "preprocessor.pkl"))
-
             logging.info("Preprocessor Object Saved")
-
-            return (train_data_transformed, test_data_tranformed)
         
         except Exception as e:
             logging.error(CustomException(e, sys))
-
-
-
-
-
