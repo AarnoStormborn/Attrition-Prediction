@@ -9,4 +9,5 @@ pydantic
 uvicorn
 mlflow==2.4.1
 boto3
+apache-airflow
 -e .
